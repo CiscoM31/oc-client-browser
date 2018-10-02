@@ -76,7 +76,7 @@ var oc = oc || {};
   if (oc.conf.s3 && typeof oc.conf.s3.path === 'string' && oc.conf.s3.componentsDir) {
     var s3Path = oc.conf.s3.path;
     if (!s3Path.startsWith('http')) {
-      s3Path = 'https://' + s3Path;
+      s3Path = 'https:' + s3Path;
     }
     var INTERSIGHT_3RD_PARTY_CDN = s3Path + oc.conf.s3.componentsDir + '/an-3rdparty/';
     xhrTransportCDNFilePath = INTERSIGHT_3RD_PARTY_CDN + 'jquery-ajax-transport-xdomainrequest-1.0.3.js';
