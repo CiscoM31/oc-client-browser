@@ -68,6 +68,23 @@ var oc = oc || {};
     MESSAGES_RETRIEVING =
       'Unrendered component found. Trying to retrieve it...';
 
+  var xhrTransportCDNFilePath = CDNJS_BASEURL + 'jquery-ajaxtransport-xdomainrequest/1.0.3/jquery.xdomainrequest.min.js',
+    jqueryCDNFilePath = CDNJS_BASEURL + 'jquery/1.11.2/jquery.min.js',
+    handlebarCDNFilePath = CDNJS_BASEURL + 'handlebars.js/4.0.6/handlebars.runtime.min.js',
+    jadeCDNFilePath = CDNJS_BASEURL + 'jade/1.11.0/runtime.min.js';
+
+  if (oc.conf.s3 && typeof oc.conf.s3.path === 'string' && oc.conf.s3.componentsDir) {
+    var s3Path = oc.conf.s3.path;
+    if (!s3Path.startsWith('http')) {
+      s3Path = 'https://' + s3Path;
+    }
+    var INTERSIGHT_3RD_PARTY_CDN = s3Path + oc.conf.s3.componentsDir + '/an-3rdparty/';
+    xhrTransportCDNFilePath = INTERSIGHT_3RD_PARTY_CDN + 'jquery-ajax-transport-xdomainrequest-1.0.3.js';
+    jqueryCDNFilePath = INTERSIGHT_3RD_PARTY_CDN + 'jquery-3.0.0.js';
+    handlebarCDNFilePath = INTERSIGHT_3RD_PARTY_CDN + 'handlebars-4.0.6.js';
+    jadeCDNFilePath = INTERSIGHT_3RD_PARTY_CDN + 'jade-1.11.0.js';
+  }
+
   // The code
   var debug = oc.conf.debug || false,
     noop = function() {},
@@ -94,8 +111,7 @@ var oc = oc || {};
       externals: [
         {
           global: 'Handlebars',
-          url:
-            'https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.6/handlebars.runtime.min.js'
+          url: handlebarCDNFilePath
         }
       ]
     },
@@ -103,8 +119,7 @@ var oc = oc || {};
       externals: [
         {
           global: 'jade',
-          url:
-            'https://cdnjs.cloudflare.com/ajax/libs/jade/1.11.0/runtime.min.js'
+          url: jadeCDNFilePath
         }
       ]
     }
@@ -305,7 +320,7 @@ var oc = oc || {};
 
       var requirePolyfills = function($, cb) {
         if (is9 && !$.IE_POLYFILL_LOADED) {
-          oc.require(IE9_AJAX_POLYFILL_URL, cb);
+          oc.require(xhrTransportCDNFilePath, cb);
         } else {
           cb();
         }
@@ -350,7 +365,7 @@ var oc = oc || {};
       var wasJqueryThereAlready = !!$window.jQuery;
       var wasDollarThereAlready = !!$window.$;
 
-      oc.require('jQuery', JQUERY_URL, function(jQuery) {
+      oc.require('jQuery', jqueryCDNFilePath, function(jQuery) {
         requirePolyfills(jQuery, function() {
           if (wasJqueryThereAlready || wasDollarThereAlready) {
             oc.$ = jQuery;
