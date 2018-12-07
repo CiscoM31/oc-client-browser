@@ -78,7 +78,7 @@ var oc = oc || {};
     if (!s3Path.startsWith('http')) {
       s3Path = 'https:' + s3Path;
     }
-    var INTERSIGHT_3RD_PARTY_CDN = s3Path + oc.conf.s3.componentsDir + '/an-3rdparty/1.0.0/libs/';
+    var INTERSIGHT_3RD_PARTY_CDN = s3Path + oc.conf.s3.componentsDir + '/an-3rdparty/0.0.1-ashwkum4.3/libs/';
     xhrTransportCDNFilePath = INTERSIGHT_3RD_PARTY_CDN + 'jquery-ajax-transport-xdomainrequest-1.0.3.min.js';
     jqueryCDNFilePath = INTERSIGHT_3RD_PARTY_CDN + 'jquery-3.0.0.min.js';
     handlebarCDNFilePath = INTERSIGHT_3RD_PARTY_CDN + 'handlebars-4.0.6.runtime.min.js';
