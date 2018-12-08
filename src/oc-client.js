@@ -10,6 +10,8 @@ var oc = oc || {};
     .then(function(response) {
       return response.json();
     }).then(function(activeVersionsJson) {
+      window.oc = window.oc || {};
+      window.oc.activeVersions = activeVersionsJson;
       var an3rdPartyVersion = activeVersionsJson && activeVersionsJson.default && 
         activeVersionsJson.default['an-3rdparty'];
       if (an3rdPartyVersion && typeof an3rdPartyVersion === 'string') {
