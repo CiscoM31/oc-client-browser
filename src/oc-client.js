@@ -93,10 +93,6 @@ var oc = oc || {};
     jadeCDNFilePath = CDNJS_BASEURL + 'jade/1.11.0/runtime.min.js';
 
   if (INTERSIGHT_3RD_PARTY_CDN) {
-    var s3Path = oc.conf.s3.path;
-    if (!s3Path.startsWith('http')) {
-      s3Path = 'https:' + s3Path;
-    }
     xhrTransportCDNFilePath = INTERSIGHT_3RD_PARTY_CDN + 'jquery-ajax-transport-xdomainrequest-1.0.3.min.js';
     jqueryCDNFilePath = INTERSIGHT_3RD_PARTY_CDN + 'jquery-3.0.0.min.js';
     handlebarCDNFilePath = INTERSIGHT_3RD_PARTY_CDN + 'handlebars-4.0.6.runtime.min.js';
