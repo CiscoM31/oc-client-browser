@@ -12,8 +12,8 @@ var oc = oc || {};
     }).then(function(activeVersionsJson) {
       window.oc = window.oc || {};
       window.oc.activeVersions = activeVersionsJson;
-      var an3rdPartyVersion = activeVersionsJson && activeVersionsJson.default && 
-        activeVersionsJson.default['an-3rdparty'];
+      var an3rdPartyVersion = activeVersionsJson && activeVersionsJson.activeVersions && 
+        activeVersionsJson.activeVersions.default && activeVersionsJson.activeVersions.default['an-3rdparty'];
       if (an3rdPartyVersion && typeof an3rdPartyVersion === 'string') {
         if (typeof define === 'function' && define.amd) {
           // AMD. Register as an anonymous module
