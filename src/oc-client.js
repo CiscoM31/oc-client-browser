@@ -5,8 +5,8 @@
 var oc = oc || {};
 
 (function(root, factory) {
-  var currentHREF = window.location.href;
-  fetch(currentHREF + '/uistatic/api/scope/an-3rdparty',
+  var currentOrigin = window.location.origin;
+  fetch(currentOrigin + '/uistatic/api/scope/an-3rdparty',
     {
       "headers": {
         "accept": "application/vnd.oc.unrendered+json"
