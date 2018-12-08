@@ -5,23 +5,37 @@
 var oc = oc || {};
 
 (function(root, factory) {
-  if (typeof define === 'function' && define.amd) {
-    // AMD. Register as an anonymous module
-    define(['exports', 'jquery'], function(exports, $) {
-      $.extend(exports, root.oc);
-      factory((root.oc = exports), $, root.ljs, root.document, root.window);
+  var currentHREF = window.location.href;
+  fetch(currentHREF + '/uistatic/api/activeVersions')
+    .then(function(response) {
+      return response.json();
+    }).then(function(activeVersionsJson) {
+      var an3rdPartyVersion = activeVersionsJson && activeVersionsJson.default && 
+        activeVersionsJson.default['an-3rdparty'];
+      if (an3rdPartyVersion && typeof an3rdPartyVersion === 'string') {
+        if (typeof define === 'function' && define.amd) {
+          // AMD. Register as an anonymous module
+          define(['exports', 'jquery'], function(exports, $) {
+            $.extend(exports, root.oc);
+            factory((root.oc = exports), $, root.ljs, root.document, root.window, an3rdPartyVersion);
+          });
+        } else if (
+          typeof exports === 'object' &&
+          typeof exports.nodeName !== 'string'
+        ) {
+          // Common JS
+          factory(exports, require('jquery'), root.ljs, root.document, root.window, an3rdPartyVersion);
+        } else {
+          // Browser globals
+          factory((root.oc = oc), root.$, root.ljs, root.document, root.window, an3rdPartyVersion);
+        }
+      } else {
+        throw new Error('Error in reading the an-3rdparty default version');
+      }
+    }).catch(function(error) {
+      console.error('Error in loading activeVersions', error);
     });
-  } else if (
-    typeof exports === 'object' &&
-    typeof exports.nodeName !== 'string'
-  ) {
-    // Common JS
-    factory(exports, require('jquery'), root.ljs, root.document, root.window);
-  } else {
-    // Browser globals
-    factory((root.oc = oc), root.$, root.ljs, root.document, root.window);
-  }
-})(this, function(exports, $, ljs, $document, $window) {
+})(this, function(exports, $, ljs, $document, $window, an3rdPartyVersion) {
   // jshint ignore:line
   // public variables
   oc.conf = oc.conf || {};
@@ -78,7 +92,7 @@ var oc = oc || {};
     if (!s3Path.startsWith('http')) {
       s3Path = 'https:' + s3Path;
     }
-    var INTERSIGHT_3RD_PARTY_CDN = s3Path + oc.conf.s3.componentsDir + '/an-3rdparty/0.0.1-ashwkum4.3/libs/';
+    var INTERSIGHT_3RD_PARTY_CDN = s3Path + oc.conf.s3.componentsDir + '/an-3rdparty/' + an3rdPartyVersion + '/libs/';
     xhrTransportCDNFilePath = INTERSIGHT_3RD_PARTY_CDN + 'jquery-ajax-transport-xdomainrequest-1.0.3.min.js';
     jqueryCDNFilePath = INTERSIGHT_3RD_PARTY_CDN + 'jquery-3.0.0.min.js';
     handlebarCDNFilePath = INTERSIGHT_3RD_PARTY_CDN + 'handlebars-4.0.6.runtime.min.js';
