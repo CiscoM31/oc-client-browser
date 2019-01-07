@@ -15,32 +15,33 @@ var oc = oc || {};
     .then(function(response) {
       return response.json();
     }).then(function(an3rdPartyMeta) {
-      var INTERSIGHT_3RD_PARTY_CDN = an3rdPartyMeta && an3rdPartyMeta.template && an3rdPartyMeta.template.src &&
-        an3rdPartyMeta.template.src.replace('template.js', 'libs/') + '';
-      if (INTERSIGHT_3RD_PARTY_CDN && typeof INTERSIGHT_3RD_PARTY_CDN === 'string') {
+      var an3rdPartyMetaTemplatePath = an3rdPartyMeta && an3rdPartyMeta.template && an3rdPartyMeta.template.src;
+      if (an3rdPartyMetaTemplatePath && typeof an3rdPartyMetaTemplatePath === 'string') {
+        oc.intersight3rdPartyCDN = an3rdPartyMetaTemplatePath.replace('/template.js', '');
+        var OC_HELPER_LIBS_CDN = oc.intersight3rdPartyCDN + '/libs';
         if (typeof define === 'function' && define.amd) {
           // AMD. Register as an anonymous module
           define(['exports', 'jquery'], function(exports, $) {
             $.extend(exports, root.oc);
-            factory((root.oc = exports), $, root.ljs, root.document, root.window, INTERSIGHT_3RD_PARTY_CDN);
+            factory((root.oc = exports), $, root.ljs, root.document, root.window, OC_HELPER_LIBS_CDN);
           });
         } else if (
           typeof exports === 'object' &&
           typeof exports.nodeName !== 'string'
         ) {
           // Common JS
-          factory(exports, require('jquery'), root.ljs, root.document, root.window, INTERSIGHT_3RD_PARTY_CDN);
+          factory(exports, require('jquery'), root.ljs, root.document, root.window, OC_HELPER_LIBS_CDN);
         } else {
           // Browser globals
-          factory((root.oc = oc), root.$, root.ljs, root.document, root.window, INTERSIGHT_3RD_PARTY_CDN);
+          factory((root.oc = oc), root.$, root.ljs, root.document, root.window, OC_HELPER_LIBS_CDN);
         }
       } else {
-        throw new Error('Error in reading the an-3rdparty default version');
+        throw new Error('Error in reading the an-3rdparty template path and so default version');
       }
     }).catch(function(error) {
       console.error('Error in loading activeVersions', error);
     });
-})(this, function(exports, $, ljs, $document, $window, INTERSIGHT_3RD_PARTY_CDN) {
+})(this, function(exports, $, ljs, $document, $window, OC_HELPER_LIBS_CDN) {
   // jshint ignore:line
   // public variables
   oc.conf = oc.conf || {};
@@ -92,11 +93,11 @@ var oc = oc || {};
     handlebarCDNFilePath = CDNJS_BASEURL + 'handlebars.js/4.0.6/handlebars.runtime.min.js',
     jadeCDNFilePath = CDNJS_BASEURL + 'jade/1.11.0/runtime.min.js';
 
-  if (INTERSIGHT_3RD_PARTY_CDN) {
-    xhrTransportCDNFilePath = INTERSIGHT_3RD_PARTY_CDN + 'jquery-ajax-transport-xdomainrequest-1.0.3.min.js';
-    jqueryCDNFilePath = INTERSIGHT_3RD_PARTY_CDN + 'jquery-3.0.0.min.js';
-    handlebarCDNFilePath = INTERSIGHT_3RD_PARTY_CDN + 'handlebars-4.0.6.runtime.min.js';
-    jadeCDNFilePath = INTERSIGHT_3RD_PARTY_CDN + 'jade-1.11.0.runtime.min.js';
+  if (OC_HELPER_LIBS_CDN) {
+    xhrTransportCDNFilePath = OC_HELPER_LIBS_CDN + '/jquery-ajax-transport-xdomainrequest-1.0.3.min.js';
+    jqueryCDNFilePath = OC_HELPER_LIBS_CDN + '/jquery-3.0.0.min.js';
+    handlebarCDNFilePath = OC_HELPER_LIBS_CDN + '/handlebars-4.0.6.runtime.min.js';
+    jadeCDNFilePath = OC_HELPER_LIBS_CDN + '/jade-1.11.0.runtime.min.js';
   }
 
   // The code
